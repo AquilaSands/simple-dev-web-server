@@ -21,7 +21,9 @@
                 "publish",
                 "${workspaceFolder}/DevWebServer.csproj",
                 "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary",
+                "-c",
+                "Release"
             ],
             "problemMatcher": "$msCompile"
         },
