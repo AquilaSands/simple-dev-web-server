@@ -3,12 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace DevWebServer
 {
@@ -16,24 +12,33 @@ namespace DevWebServer
     {
         public static void Main(string[] args)
         {
-            // Manually set the current directory because when run from a context menu shortcut
-            // the content directory can be c:\windows\system32 which seems a tad unsafe
-            var pathToDll = "";
-            foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
+            bool isDev = string.Equals(
+                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+                EnvironmentName.Development,
+                StringComparison.OrdinalIgnoreCase);
+
+            if (!isDev)
             {
-                if (string.Equals(module.ModuleName, "devwebserver.dll", StringComparison.OrdinalIgnoreCase))
+                // Manually set the current directory because when run from a context menu shortcut
+                // the content directory can be c:\windows\system32 which seems a tad unsafe
+                var pathToDll = "";
+                foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
                 {
-                    pathToDll = module.FileName;
+                    if (string.Equals(module.ModuleName, "devwebserver.dll", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pathToDll = module.FileName;
+                        break;
+                    }
                 }
-            }
 
-            if (string.IsNullOrWhiteSpace(pathToDll))
-            {
-                throw new InvalidOperationException("Can't get the devwebserver.dll module path.");
-            }
+                if (string.IsNullOrWhiteSpace(pathToDll))
+                {
+                    throw new InvalidOperationException("Can't get the devwebserver.dll module path.");
+                }
 
-            var pathToContentRoot = Path.GetDirectoryName(pathToDll);
-            Directory.SetCurrentDirectory(pathToContentRoot);
+                var pathToContentRoot = Path.GetDirectoryName(pathToDll);
+                Directory.SetCurrentDirectory(pathToContentRoot);
+            }
 
             CreateWebHostBuilder(args).Build().Run();
         }
