@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -37,6 +38,27 @@ namespace DevWebServer
             {
                 app.UseMiddleware<SecureHeaderMiddleware>();
             }
+
+            // Provide default favicon if one is not specified in the html to prevent 404
+            // This will probably prevent using a favicon with the default 'favicon.ico' name
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path.Equals("/favicon.ico", StringComparison.OrdinalIgnoreCase))
+                {
+                    var fileInfo = env.ContentRootFileProvider.GetFileInfo("favicon.ico");
+
+                    if (fileInfo.Exists)
+                    {
+                        HttpResponse response = context.Response;
+                        response.StatusCode = StatusCodes.Status200OK;
+                        response.ContentType = "image/vnd.microsoft.icon";
+                        await response.SendFileAsync(fileInfo);
+                        return;
+                    }
+                }
+
+                await next();
+            });
 
             var config = configAccessor.Value;
 

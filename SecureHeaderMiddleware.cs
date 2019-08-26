@@ -34,11 +34,6 @@ namespace DevWebServer
                     {
                         headers[headerValuePair.Key] = headerValuePair.Value;
                     }
-
-                    // foreach (var header in result.RemoveHeaders)
-                    // {
-                    //     headers.Remove(header);
-                    // }
                 }
 
                 return Task.CompletedTask;
