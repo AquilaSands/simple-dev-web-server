@@ -11,7 +11,10 @@
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/DevWebServer.dll",
-            "args": [],
+            "args": [
+                "--urls",
+                "https://localhost:7777;http://localhost:7776"
+            ],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
