@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace DevWebServer
 {
@@ -12,7 +12,7 @@ namespace DevWebServer
         {
             bool isDev = string.Equals(
                 Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
-                EnvironmentName.Development,
+                Environments.Development,
                 StringComparison.OrdinalIgnoreCase);
 
             if (!isDev)
@@ -38,12 +38,19 @@ namespace DevWebServer
                 Directory.SetCurrentDirectory(pathToContentRoot);
             }
 
-            CreateWebHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .ConfigureKestrel(options => options.AddServerHeader = false);
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        // Set properties and call methods on options
+                        serverOptions.AddServerHeader = false;
+                    })
+                    .UseStartup<Startup>();
+                });
     }
 }
