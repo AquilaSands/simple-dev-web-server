@@ -2,6 +2,22 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "run release",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--urls",
+                "https://localhost:7777;http://localhost:7776",
+                "-c",
+                "Release",
+                "${workspaceFolder}/DevWebServer.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
