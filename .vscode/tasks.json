@@ -7,10 +7,11 @@
             "type": "process",
             "args": [
                 "run",
-                "--urls",
-                "https://localhost:7777;http://localhost:7776",
                 "-c",
                 "Release",
+                "--launch-profile",
+                "DevWebServer",
+                "-p",
                 "${workspaceFolder}/DevWebServer.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
