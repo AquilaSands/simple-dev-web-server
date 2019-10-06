@@ -62,8 +62,8 @@ namespace DevWebServer
 
             var config = configAccessor.Value;
 
-            Console.WriteLine($"Serving files from path {config.BaseDirectory}");
-            Console.WriteLine($"Directory browsing is {(config.DirectoryBrowsing ? "enabled" : "disabled")}");
+            logger.LogInformation("Serving files from path {BaseDirectory}", config.BaseDirectory);
+            logger.LogInformation("Directory browsing is {DirectoryBrowsingEnabled}", config.DirectoryBrowsing ? "enabled" : "disabled");
 
             var fsOptions = new FileServerOptions
             {
