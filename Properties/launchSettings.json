@@ -18,7 +18,7 @@
     "DevWebServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7001;http://localhost:7000",
+      "applicationUrl": "https://localhost:7777;http://localhost:7776",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
